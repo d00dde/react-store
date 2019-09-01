@@ -1,0 +1,22 @@
+setState и setState зависящий от предидущего state
+<React.Fragment></React.Fragment>
+Контролируемые поля ввода
+Трансформация данных API
+Создание лоадеров
+Обработка ошибок, отрисовка их в интерфейсе
+Методы жизненного цикла компонентов
+Children, методы React.Children
+ErrorBoyndry
+Паттерны реакт:
+-рендер-функции
+-компоненты в props
+-компоненты высшего порядка (HOC)
+Context
+Трансформация props в HOC
+Композиция, функции возвращающие функции
+Два вида композиции функций
+defaultProps
+propTypes, библиотека prop-types, airbnb/prop-types
+Router (Route, Link, Redirect, Switch, match, history)
+Redux (BindActionCreators, connect)
+
