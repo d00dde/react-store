@@ -2,12 +2,21 @@ import React from 'react';
 import './book-list-item.css';
 
 const BookListItem = ({ book }) => {
-  return(
-      <React.Fragment>
-        <h1>{book.title}</h1>
-        <h2>{book.autor}</h2>
-      </React.Fragment>
-  )
-}
+  const { title, author, price, coverImage } = book;
+  return (
+      <div className="book-list-item">
+        <div className="book-cover">
+          <img src={coverImage} alt="cover" />
+        </div>
+        <div className="book-details">
+          <a href="#" className="book-title">{title}</a>
+          <div className="book-author">{author}</div>
+          <div className="book-price">${price}</div>
+          <button className="btn btn-info add-to-cart">Add to cart</button>
+        </div>
+
+      </div>
+  );
+};
 
 export default BookListItem;

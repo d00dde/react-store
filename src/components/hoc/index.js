@@ -1,5 +1,5 @@
-import withBookstoreContext from './width-bookstore-context';
+import withBookstoreService from './with-bookstore-service';
 
-export default {
-    withBookstoreContext
+export {
+    withBookstoreService
 }
