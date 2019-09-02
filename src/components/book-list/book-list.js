@@ -9,16 +9,21 @@ import { compose } from '../../utils';
 
 
 import BookListItem from '../book-list-item';
+import Spinner from '../spinner';
 
 class BookList extends Component {
 
   componentDidMount() {
-    const data = this.props.bookstoreService.getBooks();
-    this.props.booksLoaded(data);
+    const { bookstoreService, booksLoaded } = this.props;
+    bookstoreService.getBooks()
+      .then((data) => booksLoaded(data));
   }
 
   render () {
+    if(this.props.loading)
+      return <Spinner />    
     return(
+
       <ul className="book-list">
         {
           this.props.books.map((book) => {
@@ -30,8 +35,10 @@ class BookList extends Component {
   }
 }
 
-const mapStateToProps = ({ books }) => {
-  return({ books });
+const mapStateToProps = ({ books, loading }) => {
+  return({ books,
+           loading 
+  });
 }
 
 const mapActionsToProps = (dispatch) => {
