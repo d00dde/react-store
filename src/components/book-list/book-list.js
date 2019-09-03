@@ -1,51 +1,55 @@
 import React, { Component } from 'react';
 import './book-list.css';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withBookstoreService } from '../hoc';
-import { booksLoaded } from '../../actions';
+import { fetchBooks } from '../../actions';
 import { compose } from '../../utils';
-
 
 import BookListItem from '../book-list-item';
 import Spinner from '../spinner';
+import ErrorIndicator from "../error-indicator";
 
-class BookList extends Component {
+const BookList = ({ books }) => {
+  return(
+    <ul className="book-list">
+      {
+        books.map((book) => {
+          return(<li key={book.id}> <BookListItem book={book}/></li>);
+        })
+      }
+    </ul>
+  );
+}
+
+class BookListContainer extends Component {
 
   componentDidMount() {
-    const { bookstoreService, booksLoaded } = this.props;
-    bookstoreService.getBooks()
-      .then((data) => booksLoaded(data));
+    this.props.fetchBooks();
   }
 
   render () {
-    if(this.props.loading)
-      return <Spinner />    
-    return(
-
-      <ul className="book-list">
-        {
-          this.props.books.map((book) => {
-            return(<li key={book.id}> <BookListItem book={book}/></li>);
-          })
-        }
-      </ul>
-    );
+    const { loading, error, books } = this.props;
+    if(error) return <ErrorIndicator />
+    if(loading) return <Spinner />
+    return <BookList books={books} />
   }
 }
 
-const mapStateToProps = ({ books, loading }) => {
+const mapStateToProps = ({ books, loading, error }) => {
   return({ books,
-           loading 
+           loading,
+           error
   });
 }
 
-const mapActionsToProps = (dispatch) => {
-  return bindActionCreators( {booksLoaded}, dispatch);
+const mapActionsToProps = (dispatch, ownProps) => {
+  return{
+    fetchBooks: fetchBooks(ownProps.bookstoreService, dispatch)
+  }
 }
 
 export default compose(
                     withBookstoreService(),
                     connect(mapStateToProps,mapActionsToProps)
-                )(BookList);
+                      )(BookListContainer);
