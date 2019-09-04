@@ -136,23 +136,108 @@ import { Switch } from 'react-router-dom'; служит для создания 
 
 --Redux--
 
-import { Provider } from 'react-redux';
-import {connect} from 'react-redux';
+import { createStore } from 'redux';
+const store = createStore(reducer);
 
-<Provider></Provider> оборачивает приложение аналогично Context.Provider
+Созданное хранилище передаётся объекту Provider (для React), который обеспечивает
+обновление дочерних компонентов, когда обновляется state у store.
+
+Для создания store используется функция reducer, которую мы создаём сами. 
+Требоания к reducer:
+вкачестве аргументов принимает state и action;
+action.type содержит строку с идентификатором действия;
+action.payload содержит дополнительные аргументы;
+должен возвращать полный state в конце обработки любого action;
+если действие неизвестно, то возвращает state без изменений;
+если state unfefined то reducer возвращает initialState (значение по умолчанию)
+должен быть чистой функцией (зависить только от своих аргументов)
+
+import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
+
+
+<Provider store={store}></Provider> оборачивает приложение аналогично Context.Provider
 
 export default connect(mapStateToProps, mapActionsToProps)(Component); это всторенный
 компонент высшего порядка, реализующий Consumer для Redux.
 Component получит в props значения из store, преобразованные с помощью mapStateToProps.
 Component получит в props значения actionCreators, связанные с dispatch, преобразованные
 с помощью функции mapActionsToProps.
+
 Если вместо функции mapActionsToProps передать вторым аргументом в connect
 объект actions с actionCreators, то connect автоматически применит BindActionCreators и
 вернёт все actionCreators связанные c dispatch в props.
 
+В mapActionToProps вторым аргументом можно получить ownProps. Это все свойства, доступные
+объекту, который обёрнут в connect. Таким образом можно получить контекст или props от
+вышележащих компонентов прямо в mapActionToProps.
+
 import { bindActionCreators } from 'redux'; функция, которая связыват actionCreators с
 dispatch и возвращает объект с ключами, соответствующими именам actionCreators, но уже
 связанными с dispatch.
+
+reducer можно разделить на несколько логических частей (по логике действий или
+по компонентам, которые используют данную часть state). Для этого полный state делится на
+логические части:
+
+initialState = {
+	Logic_part_1: {
+		...
+	},
+	Logic_part_2: {
+		...
+	},
+	...
+}
+
+const reducer = (state = initialState, action) => {
+	switch(action.type) {
+		case 'ACTION_1':
+		case 'ACTION_2':
+		case 'ACTION_3':
+			return {
+				...state,
+				Logic_part_1: logicPartFunction1(state, action)
+			};
+		case 'ACTION_4':
+		case 'ACTION_5':
+		case 'ACTION_6':
+			return {
+				...state,
+				Logic_part_2: logicPartFunction2(state, action)
+			};
+	}
+	default:
+		return state;
+}
+
+Таким образом, каждая часть reducer должна возвращать полную свою часть состояния. Соответственно logicPartFunction1 и logicPartFunction2 выносятся в отдельные файлы и импортируются. Ещё лучше можно сделать так:
+
+const reducer (state, action) => {
+	return:{
+		Logic_part_1: logicPartFunction1(state, action),
+		Logic_part_2: logicPartFunction2(state, action)
+	}
+}
+
+const logicPartFunction1(state, action) => {
+	if(state === undefined) {
+		//инициализация значений по умолчанию части state
+	}
+	switch(action.type){
+		case 'ACTION_1':
+			return { state.part_1 };
+		case 'ACTION_2':
+			return { state.part_1 };
+		case 'ACTION_3':
+			return { state.part_1 };
+		default: 
+			return { state.part_1 }
+	}
+}
+
+Сложные части логики из reducer удобно вынести из него в отдельные функции, либо в файлы.
+
 
 
 
