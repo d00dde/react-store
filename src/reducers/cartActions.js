@@ -29,21 +29,43 @@ const updateOrder = (id, state, action) => {
     }
 	}
 
+	const calcTotal = (price, quantity) => {
+		return state.shoppingCart.orderTotal + price*quantity;
+	}
+
 	const book = books.find((book) => book.id === id);
 	const itemId = cartItems.findIndex((item) => item.id === id);
 	const item = cartItems[itemId];
 
+	
+
 	switch (action) {
 		case 'dec':
 			if(item.count === 1)
-				return removeItemFromCart(item);
-			return updateItemToCart(changeCount(book, item, -1));
+				return {
+					cartItems: removeItemFromCart(item),
+					orderTotal: calcTotal(book.price, -1)
+				}
+			return {
+				cartItems: updateItemToCart(changeCount(book, item, -1)),
+				orderTotal: calcTotal(book.price, -1)
+			}
 		case 'inc':
 			if(item)
-				return updateItemToCart(changeCount(book, item, 1));
-			return addItemToCart(changeCount(book, item, 1));
+				return {
+					cartItems: updateItemToCart(changeCount(book, item, 1)),
+					orderTotal: calcTotal(book.price, 1)
+				}
+			return {
+				cartItems: addItemToCart(changeCount(book, item, 1)),
+				orderTotal: calcTotal(book.price, 1)
+			}
 		case 'del':
-			return removeItemFromCart(item);
+			return {
+				cartItems: removeItemFromCart(item),
+				orderTotal: calcTotal(book.price, -item.count)
+			}
+
 	}
 }
 
@@ -63,21 +85,14 @@ const cartActions = (state, action) => {
 	
 	switch (action.type) {
    	case 'BOOK_ADDED_TO_CART':
-      return {
-          cartItems: updateOrder(action.payload, state, 'inc'),
-          orderTotal: calcTotal(state.shoppingCart.cartItems)
-      }
-      
+      return updateOrder(action.payload, state, 'inc');
+
   	case 'BOOK_DECREASE_FROM_CART':
-      return {
-          cartItems: updateOrder(action.payload, state, 'dec'),
-          orderTotal: calcTotal(state.shoppingCart.cartItems)
-      }
+      return updateOrder(action.payload, state, 'dec');
+
   	case 'BOOK_DELETED_FROM_CART':
-      return {
-          cartItems: updateOrder(action.payload, state, 'del'),
-          orderTotal: calcTotal(state.shoppingCart.cartItems)
-      }
+      return updateOrder(action.payload, state, 'del');
+
 		default: 
         return state.shoppingCart;
 	}
