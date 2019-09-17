@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute, Switch } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import ShopHeader from '../shop-header';
 import { HomePage, CartPage } from '../pages';
 
@@ -10,9 +10,6 @@ const App = () => {
       <main role="main" className="container">
         <ShopHeader numItems={5} total={210}/>
         <Switch>
-        <IndexRoute
-              component={HomePage}
-              />
           <Route
               path="/"
               component={HomePage}
@@ -22,6 +19,7 @@ const App = () => {
               path="/cart"
               component={CartPage}
           />
+          <HomePage />
         </Switch>
       </main>
   );
