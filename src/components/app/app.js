@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, IndexRoute, Switch } from 'react-router-dom';
 import ShopHeader from '../shop-header';
 import { HomePage, CartPage } from '../pages';
 
@@ -10,10 +10,9 @@ const App = () => {
       <main role="main" className="container">
         <ShopHeader numItems={5} total={210}/>
         <Switch>
-        <Route
-              path="/react-store/"
+        <IndexRoute
               component={HomePage}
-              exact />
+              />
           <Route
               path="/"
               component={HomePage}
