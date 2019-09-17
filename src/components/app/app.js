@@ -11,7 +11,7 @@ const App = () => {
         <ShopHeader numItems={5} total={210}/>
         <Switch>
         <Route
-              path="/react-store"
+              path="/react-store/"
               component={HomePage}
               exact />
           <Route
