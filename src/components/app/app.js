@@ -10,6 +10,10 @@ const App = () => {
       <main role="main" className="container">
         <ShopHeader numItems={5} total={210}/>
         <Switch>
+        <Route
+              path="/react-store"
+              component={HomePage}
+              exact />
           <Route
               path="/"
               component={HomePage}
