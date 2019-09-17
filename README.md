@@ -14,15 +14,15 @@
 **Использованы технологии:** 
 + базовые технологии React; 
 + контролируемые поля ввода;
-+ методы жизненного цикал компонентов;
++ методы жизненного цикла компонентов;
 + методы React.Children;
 + трансформация данных API;
 + создание и подключение лоадеров;
 + методы обработки ошибок в приложении;
-+ error boyndry;
++ error boundary;
 + роутинг страниц в React (react-router-dom);
 + передача контекста в приложении;
 + default props;
 + контроль передаваемых свойств (props types);
-+ hight order components (hoc);
-+ Redux (connect, BindActionCreators, store enhansers, middleware, Thunk))
++ higher order components (hoc);
++ Redux (connect, BindActionCreators, store enhancers, middleware, Thunk))
